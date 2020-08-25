@@ -7,7 +7,7 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D${CMAKE_SYSTEM_NAME}")
 
 if (CMAKE_SYSTEM_NAME MATCHES "Windows")
-    set(OpenCV_DIR C:/opencv/build)
+    set(OpenCV_DIR D:/opencv/build)
 elseif (CMAKE_SYSTEM_NAME MATCHES "Linux")
     set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/build)
 endif()
