@@ -1,4 +1,4 @@
-/*
+﻿/*
  *  Copyright (C) 2019 刘臣轩
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -29,10 +29,10 @@ public:
 
 private:
     bool enable_debug;
-
-    cv::Mat show_lights;
-    cv::Mat show_armors;
-    cv::Mat show_final_armor;
+    /*debug用*/
+    cv::Mat show_lights; /*灯条帧*/
+    cv::Mat show_armors; /*装甲板帧*/
+    cv::Mat show_final_armor; /*最终结果帧*/
 
     cv::Mat DistillationColor(const cv::Mat& src);
     inline void DrawRotatedRect(const cv::Mat& image, const cv::RotatedRect& rect, const cv::Scalar& color, int thickness);
