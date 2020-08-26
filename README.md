@@ -31,7 +31,7 @@ An open source vision software for RoboMaster2020
 * Ubuntu 16.04
 ```shell
 # 下载 FightingVision2020 源码
-git clone https://github.com/HuskyRye/FightingVision2020.git
+git clone https://github.com/Haru-zt/FightingVision2020.git
 cd FightingVision2020
 
 # 编译源码
