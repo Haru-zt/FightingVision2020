@@ -1,4 +1,4 @@
-/*
+﻿/*
  *  Copyright (C) 2019 刘臣轩
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -41,19 +41,19 @@ bool ArmorDetector::DetectArmor(cv::Mat& src, cv::Point3f& target)
             cv::waitKey();
     }
     std::vector<cv::RotatedRect> lights;
-    DetectLights(src, lights);
+    DetectLights(src, lights);/*灯条判定*/
 
     std::vector<std::vector<cv::Point2f>> armors;
-    PossibleArmors(lights, armors);
+    PossibleArmors(lights, armors);/*装甲板判定*/
     if (armors.empty())
         return false;
 
-    std::vector<cv::Point2f>& final_armor = SelectFinalArmor(src, armors);
-    CalcControlInfo(final_armor, target);
+    std::vector<cv::Point2f>& final_armor = SelectFinalArmor(src, armors);/*装甲板选择*/
+    CalcControlInfo(final_armor, target);/*计算*/
     return true;
 }
 
-cv::Mat ArmorDetector::DistillationColor(const cv::Mat& src)
+cv::Mat ArmorDetector::DistillationColor(const cv::Mat& src)/*颜色二值化*/
 {
     std::vector<cv::Mat> bgr;
     cv::split(src, bgr);
@@ -65,7 +65,7 @@ cv::Mat ArmorDetector::DistillationColor(const cv::Mat& src)
     return result;
 }
 
-inline void ArmorDetector::DrawRotatedRect(const cv::Mat& image, const cv::RotatedRect& rect, const cv::Scalar& color, int thickness)
+inline void ArmorDetector::DrawRotatedRect(const cv::Mat& image, const cv::RotatedRect& rect, const cv::Scalar& color, int thickness)/*标记矩形函数*/
 {
     cv::Point2f vertices[4];
     rect.points(vertices);
@@ -86,20 +86,20 @@ void ArmorDetector::DetectLights(const cv::Mat& src, std::vector<cv::RotatedRect
     float thresh = (mcu_data.enemy_color == EnemyColor::BLUE) ? armorParam.blue_thresh : armorParam.red_thresh;
     cv::threshold(distillation, binary_color_image, thresh, 255, cv::THRESH_BINARY);
     // cv::morphologyEx(binary_color_image, binary_color_image, cv::MORPH_CLOSE, cv::Mat());
-    cv::dilate(binary_color_image, binary_color_image, cv::Mat());
+    cv::dilate(binary_color_image, binary_color_image, cv::Mat());  /*膨胀*/
 
-    std::vector<std::vector<cv::Point>> contours_color;
+    std::vector<std::vector<cv::Point>> contours_color; /*颜色轮廓*/
     cv::findContours(binary_color_image, contours_color, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_SIMPLE);
-    std::vector<std::vector<cv::Point>> contours_brightness;
+    std::vector<std::vector<cv::Point>> contours_brightness; /*亮度轮廓*/
     cv::findContours(binary_brightness_image, contours_brightness, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_SIMPLE);
 
     lights.reserve(contours_color.size());
     for (unsigned int i = 0; i < contours_brightness.size(); ++i) {
         for (unsigned int j = 0; j < contours_color.size(); ++j) {
-            if (cv::pointPolygonTest(contours_color[j], contours_brightness[i][0], false) >= 0.0) {
+            if (cv::pointPolygonTest(contours_color[j], contours_brightness[i][0], false) >= 0.0) {     /*判断亮度点是否在颜色轮廓内*/
                 cv::RotatedRect single_light = cv::minAreaRect(contours_brightness[i]);
-                cv::Rect bounding_rect = single_light.boundingRect();
-                if (bounding_rect.height < bounding_rect.width || single_light.size.area() < armorParam.light_min_area)
+                cv::Rect bounding_rect = single_light.boundingRect();/*得到一个垂直的矩形*/
+                if (bounding_rect.height < bounding_rect.width || single_light.size.area() < armorParam.light_min_area)    /*垂直矩形的高度大于宽度，且面积大于最小值*/
                     break;
                 lights.emplace_back(single_light);
                 break;
@@ -116,7 +116,7 @@ void ArmorDetector::DetectLights(const cv::Mat& src, std::vector<cv::RotatedRect
     }
 }
 
-inline void ArmorDetector::DrawArmor(const cv::Mat& image, const std::vector<cv::Point2f>& armor, const cv::Scalar& color, int thickness)
+inline void ArmorDetector::DrawArmor(const cv::Mat& image, const std::vector<cv::Point2f>& armor, const cv::Scalar& color, int thickness)/*标注装甲板*/
 {
     for (int i = 0; i < 4; i++)
         cv::line(image, armor[i], armor[(i + 1) % 4], color, thickness, cv::LINE_AA);
@@ -128,7 +128,7 @@ void ArmorDetector::PossibleArmors(const std::vector<cv::RotatedRect>& lights, s
         for (unsigned int j = i + 1; j < lights.size(); ++j) {
             float angle_i = (lights[i].angle <= -45.0) ? lights[i].angle + 90 : lights[i].angle;
             float angle_j = (lights[j].angle <= -45.0) ? lights[j].angle + 90 : lights[j].angle;
-            float angle_diff = std::abs(angle_i - angle_j);
+            float angle_diff = std::abs(angle_i - angle_j);                   /*由于opencv的角度选择随矩形旋转角度不同并不一致，为方便处理这里统一进行变换*/
             // std::cout << "\nangle_diff = " << angle_diff;
             if (angle_diff > armorParam.armor_max_angle_diff)
                 continue;
@@ -137,14 +137,14 @@ void ArmorDetector::PossibleArmors(const std::vector<cv::RotatedRect>& lights, s
             // std::cout << "\nangle_i = " << angle_i;
             // std::cout << "\nangle_j = " << angle_j;
             // std::cout << "\narmor_angle = " << armor_angle;
-            if (std::max(abs(armor_angle - angle_i), abs(armor_angle - angle_j)) > armorParam.armor_max_angle_diff)
+            if (std::max(abs(armor_angle - angle_i), abs(armor_angle - angle_j)) > armorParam.armor_max_angle_diff) /*角度过大*/
                 continue;
 
             float height_i = std::max(lights[i].size.width, lights[i].size.height);
             float height_j = std::max(lights[j].size.width, lights[j].size.height);
             auto height = std::minmax(height_i, height_j);
             // std::cout << "\nheight_i/height_j = " << height.second / height.first << '\n';
-            if ((height.second / height.first) > armorParam.armor_max_height_ratio)
+            if ((height.second / height.first) > armorParam.armor_max_height_ratio)  /*两个灯条的高度差*/
                 continue;
 
             float armor_width = std::sqrt((lights[i].center.x - lights[j].center.x) * (lights[i].center.x - lights[j].center.x) + (lights[i].center.y - lights[j].center.y) * (lights[i].center.y - lights[j].center.y));
@@ -152,7 +152,7 @@ void ArmorDetector::PossibleArmors(const std::vector<cv::RotatedRect>& lights, s
             // std::cout << "\narmor_width = " << narmor_width;
             // std::cout << "\narmor_height = " << armor_height;
             // std::cout << "\nwidth/height = " << armor_width / armor_height;
-            if ((armor_width / armor_height) > armorParam.armor_max_aspect_ratio)
+            if ((armor_width / armor_height) > armorParam.armor_max_aspect_ratio)  /*装甲板的宽高比*/
                 continue;
 
             std::vector<cv::Point2f> armor;
@@ -170,7 +170,8 @@ void ArmorDetector::PossibleArmors(const std::vector<cv::RotatedRect>& lights, s
     }
 }
 
-void ArmorDetector::CalcArmorInfo(std::vector<cv::Point2f>& armor, const cv::RotatedRect& left_light, const cv::RotatedRect& right_light)
+void ArmorDetector::CalcArmorInfo(std::vector<cv::Point2f>& armor, const cv::RotatedRect& left_light, const cv::RotatedRect& right_light) 
+/*计算装甲板的角点*/
 {
     cv::Point2f left_points[4], right_points[4];
     left_light.points(left_points);
@@ -192,7 +193,7 @@ void ArmorDetector::CalcArmorInfo(std::vector<cv::Point2f>& armor, const cv::Rot
     armor.emplace_back(left_down + left_shift);
 }
 
-int ArmorDetector::DetectNumber(const cv::Mat& perspective)
+int ArmorDetector::DetectNumber(const cv::Mat& perspective) /*判断数字，方法为简单的模板匹配*/
 {
     int result[9];
     for (int i = 1; i <= 8; ++i) {
@@ -213,12 +214,13 @@ std::vector<cv::Point2f>& ArmorDetector::SelectFinalArmor(const cv::Mat& src, st
     for (int i = 0; i < armors.size(); ++i) {
         cv::Mat perspective;
         cv::Mat homography = cv::findHomography(armors[i], armor_points, cv::RANSAC);
-        cv::warpPerspective(gray, perspective, homography, cv::Size(armorParam.small_armor_width, armorParam.armor_height));
-        armors_level[i] = number_level[DetectNumber(perspective)];
+        cv::warpPerspective(gray, perspective, homography, cv::Size(armorParam.small_armor_width, armorParam.armor_height));/*该处为矩阵变换*/
+        armors_level[i] = number_level[DetectNumber(perspective)]; 
+        /* 基地8(level_5) > 哨兵7(level_4) > 英雄1(level_3) > 步兵345(level_2) > 工程2(level_1) > 无0(level_0)) */
         // std::cout << "\nnumber = " << min_result_index + 1;
         // std::cout << ", level = " << armors_level[i];
     }
-    int max_level_index = std::distance(armors_level.begin(), std::max_element(armors_level.begin(), armors_level.end()));
+    int max_level_index = std::distance(armors_level.begin(), std::max_element(armors_level.begin(), armors_level.end()));/*选择等级最高的目标*/
     if (enable_debug) {
         cv::Mat perspective;
         cv::Mat homography = cv::findHomography(armors[max_level_index], armor_points, cv::RANSAC);
@@ -230,7 +232,7 @@ std::vector<cv::Point2f>& ArmorDetector::SelectFinalArmor(const cv::Mat& src, st
     return armors[max_level_index];
 }
 
-void ArmorDetector::CalcControlInfo(const std::vector<cv::Point2f>& armor, cv::Point3f& target)
+void ArmorDetector::CalcControlInfo(const std::vector<cv::Point2f>& armor, cv::Point3f& target)/*相似三角形计算角度，距离*/
 {
     return;
     static float half_camera_width = cameraParam.resolution_width / 2;
