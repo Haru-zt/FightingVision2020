@@ -234,7 +234,6 @@ std::vector<cv::Point2f>& ArmorDetector::SelectFinalArmor(const cv::Mat& src, st
 
 void ArmorDetector::CalcControlInfo(const std::vector<cv::Point2f>& armor, cv::Point3f& target)/*相似三角形计算角度，距离*/
 {
-    return;
     static float half_camera_width = cameraParam.resolution_width / 2;
     static float half_camera_height = cameraParam.resolution_height / 2;
     static float camera_fx = cameraParam.fx;
