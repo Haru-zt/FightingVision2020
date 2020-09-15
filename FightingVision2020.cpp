@@ -27,9 +27,9 @@ int FightingVision2020()
 #endif
     if (!serial_port.Init()) {
         printf("Serial_port initialization failed.\n");
-        return 1;
-    }
-    Protocol protocol(serial_port);
+        //return 1;
+   }
+    //Protocol protocol(serial_port);
     // std::thread receive(&Protocol::receiveData, protocol);
     // protocol.receiveData();
 
@@ -73,7 +73,8 @@ int FightingVision2020()
             if (!((mcu_data.state == State::ARMOR_STATE && armor_detector.DetectArmor(src, target))
                     || (mcu_data.state == State::RUNE_STATE && rune_detector.DetectRune(src, target))))
                 target = { 0, 0, -1 };
-            protocol.sendTarget(target);
+           //protocol.sendTarget(target);
+            ;
             // cv::imshow("src", src);
             // cv::waitKey(0);
             // video_writer.write(src);
