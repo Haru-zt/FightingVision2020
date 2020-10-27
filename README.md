@@ -11,7 +11,7 @@
 
 相机驱动下载地址：
 [MindVision相机驱动](http://www.mindvision.com.cn/rjxz/list_12.aspx?lcid=138)
-[Daheng相机驱动]:见官网
+[Daheng相机驱动](https://www.daheng-imaging.com/Software/index.aspx?nodeid=304)
 
 ## 二、程序下载编译运行
 
