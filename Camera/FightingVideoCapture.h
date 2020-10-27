@@ -21,7 +21,7 @@
 
 class FightingVideoCapture : public FightingCapture {
 public:
-    FightingVideoCapture(const std::string& filename);
+    FightingVideoCapture(const char* filename);
     ~FightingVideoCapture() = default;
 
     bool init() final;

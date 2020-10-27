@@ -1,3 +1,5 @@
-.vs/
-out/
-CMakeSettings.json
+
+/.vs/
+/out/
+/build/
+*.json
