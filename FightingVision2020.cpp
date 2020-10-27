@@ -25,7 +25,7 @@ int FightingVision2020()
             if (!(armor_detector.DetectArmor(src, target)))
                 target = { 0, 0, -1 };
             ;
-            cv::imshow("src", src);
+            //cv::imshow("src", src);
             cv::waitKey(1);
         } else
             break;
