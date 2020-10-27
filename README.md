@@ -10,7 +10,8 @@
   * Ubuntu 16.04 : CMake3 + GCC5
 
 相机驱动下载地址：
-[相机驱动](http://www.mindvision.com.cn/rjxz/list_12.aspx?lcid=138)
+[MindVision相机驱动](http://www.mindvision.com.cn/rjxz/list_12.aspx?lcid=138)
+[Daheng相机驱动]:见官网
 
 ## 二、程序下载编译运行
 
