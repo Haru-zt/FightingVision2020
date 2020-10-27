@@ -19,7 +19,6 @@ include_directories(${PROJECT_SOURCE_DIR}/Camera/Include)
 
 set(SRC
     "FightingVision2020.cpp"
-    
     "Camera/FightingDahengCapture.cpp"
     "Camera/FightingVideoCapture.cpp"
     "Camera/FightingUSBCapture.cpp"
