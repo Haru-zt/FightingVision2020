@@ -27,6 +27,9 @@
 #ifdef Windows
 #include <Windows.h>
 #endif
+#ifdef Linux
+#define BYTE unsigned char
+#endif
 
 class FightingDahengCapture : public FightingCapture
 {
