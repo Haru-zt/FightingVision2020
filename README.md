@@ -36,8 +36,8 @@ sudo ./FightingVision2020
   使用 Visual Studio 2019 打开 CMake 项目，编译运行
 
   项目结构：
-  *Armor文件夹主要自瞄的算法部分，需要实现装甲板识别，数字识别（暂时不需要考虑），位置结算等功能
-  *Camera文件夹为相机驱动
-  *Config文件夹为配置文件
-  *SerialPort文件夹为串口通讯
-  *Tools文件夹为一些部署时的工具
+ *Armor文件夹主要自瞄的算法部分，需要实现装甲板识别，数字识别（暂时不需要考虑），位置结算等功能
+ *Camera文件夹为相机驱动
+ *Config文件夹为配置文件
+ *SerialPort文件夹为串口通讯
+ *Tools文件夹为一些部署时的工具
