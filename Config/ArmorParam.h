@@ -17,16 +17,30 @@
 
 #pragma once
 
-#include "FightingCapture.h"
+#include "opencv2/opencv.hpp"
+#include "FightingParam.h"
 
-class FightingVideoCapture : public FightingCapture {
-public:
-    FightingVideoCapture(const std::string& filename);
-    ~FightingVideoCapture() = default;
+struct ArmorParam : FightingParam{
+    // DetectLights
+    float brightness_thresh;
+    float blue_thresh, red_thresh;
+    float light_min_area;
 
-    bool init() final;
-    bool read(cv::Mat& image) final;
+    // DetectArmors
+    float armor_max_angle_diff;
+    float armor_max_aspect_ratio;
+    float armor_max_height_ratio;
 
-private:
-    cv::VideoCapture capture;
+    // ArmorSize
+    float small_armor_width;
+    float big_armor_width;
+    float armor_height;
+    float shift_scale;
+
+    // DetectNumber
+    float number_thresh;
+
+    void LoadParam() final;
 };
+
+extern ArmorParam armorParam;

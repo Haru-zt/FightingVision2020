@@ -17,16 +17,34 @@
 
 #pragma once
 
-#include "FightingCapture.h"
+#include "SerialPort.h"
+#include "opencv2/opencv.hpp"
 
-class FightingVideoCapture : public FightingCapture {
+class Protocol {
 public:
-    FightingVideoCapture(const std::string& filename);
-    ~FightingVideoCapture() = default;
-
-    bool init() final;
-    bool read(cv::Mat& image) final;
+    explicit Protocol(SerialPort& serial_port);
+    ~Protocol();
+    void sendTarget(cv::Point3f& target);
+    void receiveData();
 
 private:
-    cv::VideoCapture capture;
+    SerialPort& serial_port_;
 };
+
+enum class EnemyColor : uchar { RED,
+    BLUE };
+enum class State : uchar { ARMOR_STATE,
+    RUNE_STATE };
+
+struct Target {
+    float yaw;
+    float pitch;
+    float distance;
+};
+
+struct McuData {
+    EnemyColor enemy_color;
+    State state;
+};
+
+extern McuData mcu_data;

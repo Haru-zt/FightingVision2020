@@ -17,16 +17,43 @@
 
 #pragma once
 
-#include "FightingCapture.h"
+#include <iostream>
+#include <string>
 
-class FightingVideoCapture : public FightingCapture {
+#ifdef Windows
+#include <Windows.h>
+#elif defined Linux
+#include <cstring>
+#include <termios.h>
+#include <fcntl.h>
+#include <unistd.h>
+#endif
+
+class SerialPort {
 public:
-    FightingVideoCapture(const std::string& filename);
-    ~FightingVideoCapture() = default;
+    SerialPort(const char* port_name);
+    ~SerialPort();
 
-    bool init() final;
-    bool read(cv::Mat& image) final;
+    bool Init();
+    int Read(uint8_t* buf, int len);
+    int Write(const uint8_t* buf, int len);
 
 private:
-    cv::VideoCapture capture;
+    bool OpenDevice();
+    bool CloseDevice();
+    bool ConfigDevice();
+
+#ifdef Windows
+    HANDLE hComm;
+#elif defined Linux
+    int serial_fd_;
+#endif
+
+    const char* port_name_;
+    unsigned long baudrate_;
+    unsigned char stop_bits_;
+    unsigned char data_bits_;
+    unsigned char parity_bits_;
 };
+
+

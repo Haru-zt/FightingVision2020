@@ -19,14 +19,31 @@
 
 #include "FightingCapture.h"
 
-class FightingVideoCapture : public FightingCapture {
+#include "GenICam/Camera.h"
+#include "GenICam/StreamSource.h"
+#include "GenICam/System.h"
+#include "ImageConvert.h"
+
+#include "CircularQueue.h"
+#include "../Config/FightingParam.h"
+
+using namespace Dahua::GenICam;
+
+class FightingDahuaCapture : public FightingCapture {
 public:
-    FightingVideoCapture(const std::string& filename);
-    ~FightingVideoCapture() = default;
+    FightingDahuaCapture();
+    ~FightingDahuaCapture();
 
     bool init() final;
     bool read(cv::Mat& image) final;
 
+    friend void grabbingCallback(const CFrame& pFrame, const void* pUser);
+
 private:
-    cv::VideoCapture capture;
+    ICameraPtr cameraSptr;
+    IStreamSourcePtr streamPtr;
+
+    CircularQueue<cv::Mat, 5> imageQueue;
 };
+
+void grabbingCallback(const CFrame& pFrame, const void* pUser);

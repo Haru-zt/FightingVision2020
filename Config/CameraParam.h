@@ -17,16 +17,22 @@
 
 #pragma once
 
-#include "FightingCapture.h"
+#include "opencv2/opencv.hpp"
+#include "FightingParam.h"
 
-class FightingVideoCapture : public FightingCapture {
-public:
-    FightingVideoCapture(const std::string& filename);
-    ~FightingVideoCapture() = default;
+struct CameraParam : FightingParam{
+    std::string camera_type;
+    std::string camera_name;
 
-    bool init() final;
-    bool read(cv::Mat& image) final;
+    int resolution_width;
+    int resolution_height;
 
-private:
-    cv::VideoCapture capture;
+    double exposure_time;
+    double frame_rate;
+    double fx;
+    double fy;
+    bool auto_white_balance;
+    void LoadParam() final;
 };
+
+extern CameraParam cameraParam;

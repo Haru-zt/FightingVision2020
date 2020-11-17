@@ -21,15 +21,17 @@
 #include <opencv2/opencv.hpp>
 #include "CircularQueue.h"
 
-#include "Include/Daheng_include/GxIAPI.h"
-#include "Include/Daheng_include/DxImageProc.h"
+#include"Include/Daheng_include/GxIAPI.h"
+#include"Include/Daheng_include/DxImageProc.h"
 
 #ifdef Windows
 #include <Windows.h>
 #endif
+
 #ifdef Linux
 #define BYTE unsigned char
 #endif
+
 
 class FightingDahengCapture : public FightingCapture
 {

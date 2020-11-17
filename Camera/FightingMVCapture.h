@@ -18,15 +18,31 @@
 #pragma once
 
 #include "FightingCapture.h"
+#include <opencv2/opencv.hpp>
+#include "CircularQueue.h"
+#include "../Config/CameraParam.h"
 
-class FightingVideoCapture : public FightingCapture {
+#ifdef Windows
+    #include <Windows.h>
+    #include "Include/MV_include/CameraApi.h"
+#elif defined Linux
+    #include "Include/MV_include/camera_api.h"
+#endif
+
+
+class FightingMVCapture : public FightingCapture {
 public:
-    FightingVideoCapture(const std::string& filename);
-    ~FightingVideoCapture() = default;
+    FightingMVCapture();
+    ~FightingMVCapture();
 
     bool init() final;
     bool read(cv::Mat& image) final;
 
+    friend void grabbingCallback(CameraHandle hCamera, BYTE* pFrameBuffer, tSdkFrameHead* pFrameHead, PVOID pContext);
+
 private:
-    cv::VideoCapture capture;
+    CameraHandle m_hCamera;
+    BYTE* m_pFrameBuffer;
+
+   CircularQueue<cv::Mat, 4> circular_queue;
 };

@@ -4,10 +4,10 @@ int FightingVision2020()
 {
     FightingCapture* capture;
     //如果使用大恒相机测试
-    //capture = new FightingDahengCapture();
+    capture = new FightingDahengCapture();
     //如果选择使用视频来测试
     char* filename = "D:\\red-ev-0.MOV";
-    capture = new FightingVideoCapture(filename);
+    //capture = new FightingVideoCapture(filename);
 
     if (capture && !capture->init()) {
         printf("Video source initialization failed.\n");

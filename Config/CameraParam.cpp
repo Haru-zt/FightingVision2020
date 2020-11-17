@@ -15,18 +15,19 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#pragma once
+#include "CameraParam.h"
 
-#include "FightingCapture.h"
+CameraParam cameraParam;
 
-class FightingVideoCapture : public FightingCapture {
-public:
-    FightingVideoCapture(const std::string& filename);
-    ~FightingVideoCapture() = default;
-
-    bool init() final;
-    bool read(cv::Mat& image) final;
-
-private:
-    cv::VideoCapture capture;
-};
+void CameraParam::LoadParam()
+{
+    cv::FileStorage fs("CameraParam.yml", cv::FileStorage::READ);
+    fs["camera_type"] >> cameraParam.camera_type;
+    fs["camera_name"] >> cameraParam.camera_name;
+    fs["resolution_width"] >> cameraParam.resolution_width;
+    fs["resolution_height"] >> cameraParam.resolution_height;
+    fs["exposure_time"] >> cameraParam.exposure_time;
+    fs["frame_rate"] >> cameraParam.frame_rate;
+    fs["auto_white_balance"] >> cameraParam.auto_white_balance;
+    fs.release();
+}

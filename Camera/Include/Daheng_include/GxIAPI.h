@@ -1851,7 +1851,7 @@ GX_API GXGetBufferLength	      (GX_DEV_HANDLE hDevice, GX_FEATURE_ID_CMD feature
 GX_API GXGetBuffer			      (GX_DEV_HANDLE hDevice, 
 								   GX_FEATURE_ID_CMD featureID, 
 								   uint8_t* pBuffer, 
-								   size_t* pnSize);
+								   size_t pnSize);
 
 //----------------------------------------------------------------------------------
 /**

@@ -17,7 +17,7 @@
 
 #include "FightingVideoCapture.h"
 
-FightingVideoCapture::FightingVideoCapture(const char* filename)
+FightingVideoCapture::FightingVideoCapture(const std::string& filename)
 {
     capture.open(filename);
 }
