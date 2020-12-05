@@ -23,6 +23,9 @@ set(SRC
     "Camera/FightingVideoCapture.cpp"
     "Camera/FightingUSBCapture.cpp"
     "Armor/ArmorDetector.cpp"
+    "Armor/LightBar.cpp"
+    "Armor/ArmorBox.cpp"
+    "Armor/matchArmors.cpp"
 )
 
 add_executable (FightingVision2020 ${SRC})
